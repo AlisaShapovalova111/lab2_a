@@ -1,0 +1,43 @@
+#include <iostream>
+#include <vector>
+#include <typeinfo>
+
+using namespace std;
+
+class Class1 {
+public:
+    virtual void print() {
+        cout << "This is Class1" << endl;
+    }
+};
+
+class Class2 : public Class1 {
+public:
+    void print() override {
+        cout << "This is Class2" << endl;
+    }
+};
+
+void my_copy(vector<Class1*>& db, Class1* obj) {
+    db.push_back(obj->clone());
+}
+
+int main() {
+    vector<Class1*> db;
+
+    Class1* obj1 = new Class1();
+    Class1* obj2 = new Class2();
+
+    my_copy(db, obj1);
+    my_copy(db, obj2);
+
+    delete obj1;
+    delete obj2;
+
+    for (auto obj : db) {
+        cout << typeid(*obj).name() << endl;
+        delete obj;
+    }
+
+    return 0;
+}
